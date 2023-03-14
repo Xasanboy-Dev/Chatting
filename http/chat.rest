@@ -1,0 +1,36 @@
+@url=http://localhost:8080/chat
+
+GET {{url}}/text/1
+X-KEY:64d8291b-5ede-4a81-8c29-4decf35f4b85
+
+###
+POST {{url}}/text
+Content-Type: application/json
+
+{
+    "sender":"Xasanboy",
+    "senderID":2,
+    "message":"Hello Xasanboy. How are you!",
+    "taker":"John",
+    "takerID":5
+}
+
+###
+GET {{url}}/text
+x-key:64d8291b-5ede-4a81-8c29-4decf35f4b85
+
+###
+DELETE {{url}}/text/1
+Content-Type: application/json
+
+{
+    "messageID":2
+}
+###
+PUT {{url}}/text/1
+Content-Type: application/json
+
+{
+    "messageID":5,
+    "message":"Hello brother. How are you!"
+}
