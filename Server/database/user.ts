@@ -34,3 +34,10 @@ export async function findUsers() {
 export async function removeUserById(id: number) {
   return await prisma.user.delete({ where: { id } });
 }
+
+export async function getUserSearch(
+  name: string,
+  surname: string,
+  email: string,
+  location: string
+) {}

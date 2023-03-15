@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { Sign } from "../database/token";
 import {
   checkUserExistByEmail,
@@ -57,14 +57,8 @@ export async function postRegister(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
-    const SECRET = process.env.SECRET_ACCES_KEY;
-    const secret = req.header("x-key");
-    if (secret !== SECRET) {
-      return res.status(404).json({ message: "You have not got secret key!" });
-    } else {
-      const users = await findUsers();
-      res.status(200).json({ message: "All users", users });
-    }
+    const users = await findUsers();
+    res.status(200).json({ message: "All users", users });
   } catch (error: any) {
     console.log(error.message);
     res.status(500).json({ message: "Internal error" });
@@ -73,7 +67,7 @@ export async function getAllUsers(req: Request, res: Response) {
 
 export async function deleteUserById(req: Request, res: Response) {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     const secret = req.header("x-key");
     if (!secret || !id) {
       return res.status(401).json({ message: "You have some problems!" });
@@ -92,6 +86,31 @@ export async function deleteUserById(req: Request, res: Response) {
             .json({ message: "Deleted succesfully", user: removedUser });
         }
       }
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function getUserBySearch(req: Request, res: Response) {
+  try {
+    const { userID } = req.params;
+    if (userID) {
+      const user = await checkUserExistByID(+userID);
+      if (user) {
+        const {
+          name,
+          surname,
+          email,
+          location,
+        }: { name: string; surname: string; email: string; location: string } =
+          req.body;
+      } else {
+        return res.status(401).json({ message: "You must to login!" });
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" });
     }
   } catch (error: any) {
     console.log(error.message);

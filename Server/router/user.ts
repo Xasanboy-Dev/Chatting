@@ -12,5 +12,5 @@ router.post("/login", postLogin);
 router.post("/register", postRegister);
 router.get("/users", getAllUsers);
 router.delete("/:id", deleteUserById);
-
+router.post("/user/:userID",);
 export default router;

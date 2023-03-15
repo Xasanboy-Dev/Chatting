@@ -7,7 +7,7 @@ import Layot from "./pages/Header/Layout"
 import Index from "./pages/Auth/IndexPage"
 import { useState } from "react"
 function App() {
-  let [darkMode, setDarkMode] = useState(false)
+  let [darkMode, setDarkMode] = useState(Boolean)
   return (
     <div>
       <Routes>
