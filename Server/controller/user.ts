@@ -73,15 +73,16 @@ export async function getAllUsers(req: Request, res: Response) {
 
 export async function deleteUserById(req: Request, res: Response) {
   try {
-    const { usserID: userID } = req.params;
-    const secret = req.header("x-keey");
-    if (!secret || userID) {
+    const { id } = req.params
+    const secret = req.header("x-key");
+    if (!secret || !id) {
       return res.status(401).json({ message: "You have some problems!" });
     } else {
-      if (secret !== process.env.SECRET_ACCES_KEY) {
+      const SECRET = process.env.SECRET_ACCES_KEY;
+      if (secret !== SECRET) {
         return res.status(401).json({ message: "You have some problems!" });
       } else {
-        const user = await checkUserExistByID(+userID);
+        const user = await checkUserExistByID(+id);
         if (!user) {
           return res.status(401).json({ message: "You have some problems!" });
         } else {
