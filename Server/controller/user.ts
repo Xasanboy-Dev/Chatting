@@ -1,4 +1,5 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
+import { Verify } from "./../database/token";
 import { Sign } from "../database/token";
 import {
   checkUserExistByEmail,
@@ -115,5 +116,25 @@ export async function getUserBySearch(req: Request, res: Response) {
   } catch (error: any) {
     console.log(error.message);
     res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function checkTokenValid(req: Request, res: Response) {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(401).json({ message: "User not authorized!" });
+    } else {
+      try {
+        const result = await Verify(token);
+        res.status(200).json({ message: "Successfully!", user: result });
+      } catch (error: any) {
+        console.log(error.message);
+        return res.status(401).json({ message: "User not authorized!" });
+      }
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    return res.status(500).json({ message: "Internal error" });
   }
 }

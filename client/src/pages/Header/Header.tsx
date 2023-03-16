@@ -1,5 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { checkTokenValid } from "../../TypeScript/Auth/Auth"
 export default function Header({ darkMode, setDarkMode }: { darkMode: Boolean, setDarkMode: (darkMode: boolean) => void }) {
+    let [bool, setBool] = useState(Boolean)
+    let token = localStorage.getItem("id")
+    useEffect(() => {
+        if (token) {
+            const result = checkTokenValid(token)
+            result.then(res => {
+                setBool(res)
+            })
+        } else {
+            setBool(false)
+        }
+    }, [])
     let [search, setSearch] = useState("")
     function onSubmit(e: any, search: string) {
         e.preventDefault()
@@ -76,9 +89,27 @@ export default function Header({ darkMode, setDarkMode }: { darkMode: Boolean, s
                     </form>
                 </li>
                 <li className={`flex gap-5 mx-[5%] text-${darkMode ? "light" : "dark"} `}>
-                    <h1 className={`shadow shadow-2xl border border-${darkMode ? "light" : "dark"} rounded p-2 cursor-pointer`}>Archive<i className="bi bi-file-earmark-zip"></i></h1>
-                    <h1 className={`shadow shadow-2xl border border-${darkMode ? "light" : "dark"} rounded p-2 cursor-pointer`}>Notifications<i className="bi bi-bell"></i></h1>
-                    <h1 className={`shadow shadow-2xl border border-${darkMode ? "light" : "dark"} rounded p-2 cursor-pointer`}>Profile<i className="bi bi-person-circle"></i></h1>
+                    <h1
+                        className={`shadow shadow-2xl border border-
+                    ${darkMode ? "light" : "dark"}
+                     rounded p-2 cursor-pointer`
+                        }
+                        style={{ display: bool ? "block" : "none" }}
+                    >Archive<i className="bi bi-file-earmark-zip"></i></h1>
+                    <h1
+                        className={`shadow shadow-2xl border border-
+                    ${darkMode ? "light" : "dark"}
+                     rounded p-2 cursor-pointer`
+                        }
+                        style={{ display: bool ? "block" : "none" }}
+                    >Notifications<i className="bi bi-bell"></i></h1>
+                    <h1
+                        className={`shadow shadow-2xl border border-
+                    ${darkMode ? "light" : "dark"}
+                     rounded p-2 cursor-pointer`
+                        }
+                        style={{ display: bool ? "block" : "none" }}
+                    >Profile<i className="bi bi-person-circle"></i></h1>
                 </li>
             </ul>
             <div>

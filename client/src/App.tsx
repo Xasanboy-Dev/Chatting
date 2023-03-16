@@ -16,7 +16,7 @@ function App() {
         <Route path='/' element={<Layot darkMode={darkMode} setDarkMode={setDarkMode} />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/sadmclskmcdlskm" element={<Header darkMode={darkMode} setDarkMode={setDarkMode} />} />
-          <Route path="/index" element={<Index />} />
+          <Route path="/index" element={<Index darkMode={darkMode} />} />
         </Route>
       </Routes>
     </div>

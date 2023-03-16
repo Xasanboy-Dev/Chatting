@@ -2,8 +2,7 @@ import jwt from "jsonwebtoken";
 
 export async function Verify(token: string) {
   const SECRET = process.env.SECRET_ACCES_KEY;
-  const answer = jwt.verify(token, SECRET!);
-  console.log(answer);
+  return jwt.verify(token, SECRET!);
 }
 
 export async function Sign(
