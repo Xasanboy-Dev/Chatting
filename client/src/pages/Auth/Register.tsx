@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { postDataUser } from "../../TypeScript/Auth/Auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../TypeScript/Auth/firebase";
 export default function Register() {
     let [name, setName] = useState("")
     let [surname, setSurname] = useState("")
@@ -17,6 +19,20 @@ export default function Register() {
                 return window.location.href = '/login'
             }
         }
+    }
+    const auth = getAuth(app);
+    const signInWithGoogle = async () => {
+        signInWithPopup(auth, new GoogleAuthProvider())
+            .then(res => {
+                setEmail(res.user.email!)
+                setPassword(res.user.uid)
+                let displayName = res.user.displayName?.split(" ")
+                setName(displayName ? displayName[0] : name)
+                setSurname(displayName ? displayName[1] : surname)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (
@@ -40,6 +56,7 @@ export default function Register() {
                             </label>
                             <div className="flex flex-col items-start">
                                 <input
+                                    value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     type="text"
                                     name="name"
@@ -56,6 +73,7 @@ export default function Register() {
                             </label>
                             <div className="flex flex-col items-start">
                                 <input
+                                    value={surname}
                                     onChange={(e) => setSurname(e.target.value)}
                                     type="text"
                                     name="password_confirmation"
@@ -72,6 +90,7 @@ export default function Register() {
                             </label>
                             <div className="flex flex-col items-start">
                                 <input
+                                    value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     type="email"
                                     name="email"
@@ -88,6 +107,7 @@ export default function Register() {
                             </label>
                             <div className="flex flex-col items-start">
                                 <input
+                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     type="password"
                                     name="password"
@@ -125,6 +145,7 @@ export default function Register() {
                             aria-label="Login with Google"
                             type="button"
                             className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400"
+                            onClick={() => signInWithGoogle()}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { LoginFile } from "../../TypeScript/Auth/Auth";
+import { app } from "../../TypeScript/Auth/firebase";
 export default function Login() {
     let [email, setEmail] = useState("")
     let [password, setPassword] = useState("")
@@ -15,7 +17,18 @@ export default function Login() {
             }
         }
     }
-
+    const auth = getAuth(app);
+    const signInWithGoogle = async () => {
+        signInWithPopup(auth, new GoogleAuthProvider())
+            .then(res => {
+                setEmail(res.user.email!)
+                localStorage.setItem("imageURL", res.user.photoURL!)
+                setPassword(res.user.uid)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
     return (
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="shadow-lg w-full p-6 m-auto bg-white rounded-md shadow-xl lg:max-w-xl">
@@ -30,7 +43,7 @@ export default function Login() {
                         >
                             Email
                         </label>
-                        <input
+                        <input value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -44,6 +57,7 @@ export default function Login() {
                             Password
                         </label>
                         <input
+                            value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -66,6 +80,7 @@ export default function Login() {
                 </div>
                 <div className="flex mt-4 gap-x-2">
                     <button
+                        onClick={() => signInWithGoogle()}
                         type="button"
                         className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-offset-1 focus:ring-violet-600"
                     >

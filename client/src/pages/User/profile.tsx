@@ -6,7 +6,6 @@ import {
   getUsetByToken,
 } from "../../TypeScript/Users/user";
 import { user } from "../../TypeScript/modules/user";
-
 export default function Profile({ darkMode }: { darkMode: Boolean }) {
   const token = localStorage.getItem("id");
   const userID = localStorage.getItem("userID");
@@ -16,6 +15,7 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
   let [password, setPassword] = useState("");
   let [image, setImage] = useState("");
   let bool = false;
+
 
   let [aboutUser, setUser] = useState<user>();
   if (token && userID) {
@@ -33,6 +33,7 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
           setEmail(res.data.user.email);
           setPassword(res.data.user.password);
           setImage(res.data.user.imageURL);
+          setImage(localStorage.getItem("imageURL") ? localStorage.getItem("imageURL") : res.data.user.imageURL)
         }
       });
     }, []);
@@ -58,20 +59,17 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                 <li>
                   <label
                     className={`
-                                text-${
-                                  darkMode ? "light" : "purple-700"
-                                } text-2xl
+                                text-${darkMode ? "light" : "purple-700"
+                      } text-2xl
                                 `}
                   >
                     Your name:
                   </label>
                   <input
-                    className={`bg-${darkMode ? "dark" : "light"} text-${
-                      darkMode ? "light" : "purple-700"
-                    }
-                                    shadow border border-${
-                                      darkMode ? "light" : "dark"
-                                    } rounded text-xl p-1
+                    className={`bg-${darkMode ? "dark" : "light"} text-${darkMode ? "light" : "purple-700"
+                      }
+                                    shadow border border-${darkMode ? "light" : "dark"
+                      } rounded text-xl p-1
                                     `}
                     onChange={(e) => setName(e.target.value)}
                     value={name}
@@ -80,20 +78,17 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                 <li>
                   <label
                     className={`
-                                text-${
-                                  darkMode ? "light" : "purple-700"
-                                } text-2xl
+                                text-${darkMode ? "light" : "purple-700"
+                      } text-2xl
                                 `}
                   >
                     Your lastname:
                   </label>
                   <input
-                    className={`bg-${darkMode ? "dark" : "light"} text-${
-                      darkMode ? "light" : "purple-700"
-                    }
-                                   shadow  border border-${
-                                     darkMode ? "light" : "dark"
-                                   } rounded text-xl p-1
+                    className={`bg-${darkMode ? "dark" : "light"} text-${darkMode ? "light" : "purple-700"
+                      }
+                                   shadow  border border-${darkMode ? "light" : "dark"
+                      } rounded text-xl p-1
                                     `}
                     onChange={(e) => setLastname(e.target.value)}
                     value={lastName}
@@ -104,20 +99,17 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                 <li>
                   <label
                     className={`
-                                text-${
-                                  darkMode ? "light" : "purple-700"
-                                } text-2xl
+                                text-${darkMode ? "light" : "purple-700"
+                      } text-2xl
                                  `}
                   >
                     Your email:
                   </label>
                   <input
-                    className={`bg-${darkMode ? "dark" : "light"} text-${
-                      darkMode ? "light" : "purple-700"
-                    }
-                                    shadow border border-${
-                                      darkMode ? "light" : "dark"
-                                    } rounded text-xl p-1
+                    className={`bg-${darkMode ? "dark" : "light"} text-${darkMode ? "light" : "purple-700"
+                      }
+                                    shadow border border-${darkMode ? "light" : "dark"
+                      } rounded text-xl p-1
                                     `}
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
@@ -126,21 +118,18 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                 <li>
                   <label
                     className={`
-                                text-${
-                                  darkMode ? "light" : "purple-700"
-                                } text-2xl
+                                text-${darkMode ? "light" : "purple-700"
+                      } text-2xl
                                 `}
                   >
                     Your password:
                   </label>
                   <div className="flex">
                     <input
-                      className={`bg-${darkMode ? "dark" : "light"} text-${
-                        darkMode ? "light" : "purple-700"
-                      }
-                                    shadow border border-${
-                                      darkMode ? "light" : "dark"
-                                    } rounded text-xl p-1
+                      className={`bg-${darkMode ? "dark" : "light"} text-${darkMode ? "light" : "purple-700"
+                        }
+                                    shadow border border-${darkMode ? "light" : "dark"
+                        } rounded text-xl p-1
                                     `}
                       onChange={(e) => setPassword(e.target.value)}
                       type={`${typeOf}`}
@@ -150,11 +139,9 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                       style={{
                         display: typeOf == "password" ? "flex" : "none",
                       }}
-                      className={`text-${
-                        darkMode ? "light" : "dark"
-                      } bi bi-eye-fill border p-2 opacity border-${
-                        darkMode ? "light" : "dark"
-                      } rounded mx-1`}
+                      className={`text-${darkMode ? "light" : "dark"
+                        } bi bi-eye-fill border p-2 opacity border-${darkMode ? "light" : "dark"
+                        } rounded mx-1`}
                       onClick={() =>
                         typeOf == "password"
                           ? setTypeOf("text")
@@ -165,11 +152,9 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                       style={{
                         display: typeOf == "password" ? "none" : "flex",
                       }}
-                      className={`text-${
-                        darkMode ? "light" : "dark"
-                      } bi bi-eye-slash-fill border p-2 opacity border-${
-                        darkMode ? "light" : "dark"
-                      } rounded mx-1`}
+                      className={`text-${darkMode ? "light" : "dark"
+                        } bi bi-eye-slash-fill border p-2 opacity border-${darkMode ? "light" : "dark"
+                        } rounded mx-1`}
                       onClick={() =>
                         typeOf == "password"
                           ? setTypeOf("text")
@@ -213,28 +198,24 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                   email,
                   password,
                   bool,
-                  image==aboutUser?.imageURL?image:
+                  image == aboutUser?.imageURL ? image : ""
                 )
               }
               className={`shadow
-                         text-${darkMode ? "light" : "light"} border border-${
-                darkMode ? "light" : "dark"
-              } 
-                         cursor-${bool ? "pointer" : "not-allowed"}  opacity-${
-                bool ? "1" : "[0.5]"
-              } bg-green-700 px-4 py-1 rounded`}
+                         text-${darkMode ? "light" : "light"} border border-${darkMode ? "light" : "dark"
+                } 
+                         cursor-${bool ? "pointer" : "not-allowed"}  opacity-${bool ? "1" : "[0.5]"
+                } bg-green-700 px-4 py-1 rounded`}
             >
               Save
             </a>
             <a
               href="/profile"
               className={`shadow
-                         text-${darkMode ? "light" : "light"} border border-${
-                darkMode ? "light" : "dark"
-              } 
-                         cursor-${bool ? "pointer" : "not-allowed"} opacity-${
-                bool ? "1" : "[0.5]"
-              } bg-red-700 px-4 py-1 rounded`}
+                         text-${darkMode ? "light" : "light"} border border-${darkMode ? "light" : "dark"
+                } 
+                         cursor-${bool ? "pointer" : "not-allowed"} opacity-${bool ? "1" : "[0.5]"
+                } bg-red-700 px-4 py-1 rounded`}
             >
               Cancel
             </a>
