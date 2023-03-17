@@ -188,7 +188,7 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
               </label>
             </div>
           </ul>
-          <div className={`my-[20%] flex justify-content-center gap-5`}>
+          <div className={`my-[10%] flex justify-content-center gap-5`}>
             <a
               onClick={() =>
                 editUser(

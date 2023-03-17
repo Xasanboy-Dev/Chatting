@@ -56,3 +56,11 @@ export async function saveUserId(token: string) {
   });
   return result.data.user.id;
 }
+
+
+export async function saveUserBio(token: string) {
+  const result = await axios.post(`http:///localhost:8080/user/token`, {
+    token,
+  });
+  return result.data.user
+}

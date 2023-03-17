@@ -22,7 +22,6 @@ export default function Login() {
         signInWithPopup(auth, new GoogleAuthProvider())
             .then(res => {
                 setEmail(res.user.email!)
-                localStorage.setItem("imageURL", res.user.photoURL!)
                 setPassword(res.user.uid)
             })
             .catch(error => {
