@@ -176,12 +176,15 @@ export async function findArchievedUsers(req: Request, res: Response) {
       const ValidToken: any = Verify(token);
       if (ValidToken) {
         const user = await checkUserExistByID(ValidToken.id);
-        let users: any = [];
         if (user) {
-          let arr = user.archieve;
+          let archived = user.archieve
+          let users: user[] = []
+          archived.map(async (userId: number) => {
+            users.push((await checkUserExistByID(userId))!)
+          })
           return res
             .status(200)
-            .json({ message: "Archieved users", users: arr });
+            .json({ message: "Archieved users", users });
         } else {
           return res.status(404).json({ message: "User not found!" });
         }
@@ -255,5 +258,32 @@ export async function getUserById(req: Request, res: Response) {
   } catch (error: any) {
     console.log(error.message);
     res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function editUserById(req: Request, res: Response) {
+  try {
+    const { id } = req.params
+    if (id) {
+      const { name, lastname, email, password } = req.body
+      const user = await checkUserExistByID(+id)
+      if (user) {
+        if (email) {
+          const checkUserByEmail = await checkUserExistByEmail(email)
+          if(checkUserByEmail!){
+
+          }else{
+            return res.status(409).json({message:"Your email is already exisrt!"})
+          }
+        }
+      } else {
+        return res.status(404).json({ message: "User not found!" })
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" })
+    }
+  } catch (error: any) {
+    console.log(error.message)
+    res.status(500).json({ message: "Internal error" })
   }
 }

@@ -46,3 +46,9 @@ export async function getUserById(id: number, token: string) {
     headers: { Authorization: token },
   });
 }
+
+export async function editUser(userID: number, name: string, lastname: string, email: string, password: string) {
+  if (userID && name && lastname && email && password) {
+    axios.put(`http://localhost:8080/user`)
+  }
+}

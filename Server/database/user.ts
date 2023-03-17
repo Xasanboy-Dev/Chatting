@@ -10,7 +10,7 @@ export async function checkUserExistByID(id: number) {
   return await prisma.user.findUnique({ where: { id } });
 }
 
-export async function LOGIN(email: string, password: string) {}
+export async function LOGIN(email: string, password: string) { }
 
 export async function Register(
   name: string,
@@ -93,4 +93,8 @@ export async function removeUserFromArchieve(
     where: { id: currentUserID },
     data: { archieve: arr },
   });
+}
+
+export async function updateUser(userID: number, name: string, surname: string, email: string, password: string) {
+  return await prisma.user.update({ where: { id: userID }, data: { name, surname, email, password } })
 }

@@ -103,13 +103,13 @@ export default function Header({ darkMode, setDarkMode }: { darkMode: Boolean, s
                         }
                         style={{ display: bool ? "block" : "none" }}
                     >Notifications<i className="bi bi-bell"></i></h1>
-                    <h1
+                    <a href="/profile"
                         className={`shadow shadow-2xl border border-
                     ${darkMode ? "light" : "dark"}
                      rounded p-2 cursor-pointer`
                         }
                         style={{ display: bool ? "block" : "none" }}
-                    >Profile<i className="bi bi-person-circle"></i></h1>
+                    >Profile<i className="bi bi-person-circle"></i></a>
                 </li>
             </ul>
             <div>

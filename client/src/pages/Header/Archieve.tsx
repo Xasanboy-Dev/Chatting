@@ -1,67 +1,20 @@
-import { useEffect, useState } from "react"
-import { getUsers, SaveToArchieve, getArchivedUsers, getUserById } from "../../TypeScript/Users/user"
-import { user } from "./../../TypeScript/modules/user"
-import { CopyToClipboard } from "react-copy-to-clipboard"
-import { checkTokenValid, saveUserId } from "../../TypeScript/Auth/Auth"
+import CopyToClipboard from "react-copy-to-clipboard"
+import { getArchivedUsers } from "../../TypeScript/Users/user"
+
 export default function Archieve({ darkMode }: { darkMode: Boolean }) {
-    let search = localStorage.getItem("search")
-    let [bool, setBool] = useState(false)
-    let [tokenValid, setTokenValid] = useState(false)
+    const userID = localStorage.getItem("userID")
     const token = localStorage.getItem("id")
-    useEffect(() => {
-        if (token) {
-            const result = checkTokenValid(token)
-            result.then(res => {
-                setBool(res)
-                setTokenValid(res)
-            })
-            if (tokenValid) {
-                const result = saveUserId(token)
-                result.then(res => {
-                    localStorage.setItem('userID', res)
-                })
-            }
-        }
-    }, [])
-    let [users, setUsers] = useState<user[]>([])
-    let [searching, setSeaching] = useState("")
-    if (search) {
-        setSeaching(search!)
-        localStorage.removeItem("search")
-    }
-    if (searching) {
-
-    } else {
-        useEffect(() => {
-            let userID = localStorage.getItem("userID")
-            if (userID && token) {
-                const result = getArchivedUsers(+userID, token)
-                result.then(res => {
-                    if (res) {
-                        let arr: any[] = res.data.users
-                        let another: any = []
-                        arr.map((userId: number) => {
-                            const user = getUserById(userId, token)
-                            user.then(res => {
-                                another.push(res.data.user)
-                                setUsers(another)
-                            })
-                        })
-                    } else {
-                        setUsers(res)
-                    }
-                })
-            }
-
-        }, [])
-    }
-    if (users) {
+    if (userID && token) {
+        const ArchivedUsers = getArchivedUsers(+userID, token)
+        ArchivedUsers.then(res => {
+            console.log(res.data.users)
+        })
         return (
             <div className={`bg-${darkMode ? "dark" : "light"}`} style={{ height: innerHeight }}>
                 <ul className="py-5">
                     {users.map(user => (
                         <li className={`items-center my-5 flex border border-${darkMode ? "light" : "dark"} 
-                    border-2xl w-[80%] mx-auto rounded-2xl  shadow shadow-2xl`}>
+                        border-2xl w-[80%] mx-auto rounded-2xl  shadow shadow-2xl`}>
                             <div>
                                 <img className={`h-[75px] p-2 rounded-full`} src={`${user.imageURL}`} />
                             </div>
@@ -80,13 +33,25 @@ export default function Archieve({ darkMode }: { darkMode: Boolean }) {
                                 </CopyToClipboard>
                             </div>
                             <div style={{ display: bool ? "flex" : "none" }} className={`mx-auto flex gap-3`}>
-                                <i className="bi bi-x-circle"></i>
+                                <button
+                                    onClick={() => {
+                                        if (tokenValid) {
+                                            SaveToArchieve(token!, +localStorage.getItem("userID")!, user.id)
+                                        } else {
+                                            return alert("You can't archieve!")
+                                        }
+                                    }}
+                                    className={`
+                                text-light text-xl 
+                                 py-1 px-3 border-${darkMode ? "light" : "dark"} border
+                                 rounded bg-red-700 
+                                 `} >Archieve</button>
                                 <button
                                     className={`
-                            text-light
-                             py-1 px-3 border-${darkMode ? "light" : "dark"} border
-                             rounded bg-green-700 
-                             `} >Send a message</button>
+                                text-light
+                                 py-1 px-3 border-${darkMode ? "light" : "dark"} border
+                                 rounded bg-green-700 
+                                 `} >Send a message</button>
                             </div>
                         </li >
                     ))
@@ -95,10 +60,9 @@ export default function Archieve({ darkMode }: { darkMode: Boolean }) {
             </div >
         )
     } else {
+        window.location.href = '/login'
         return (
-            <div>
-                <h1>You have not got any archived users!</h1>
-            </div>
+            <div>Hello Bro!</div>
         )
     }
 } 

@@ -24,4 +24,5 @@ router.post("/saveArchieve/", postForArchieve);
 router.get("/archivedUsers", findArchievedUsers);
 router.delete("/archieve", deleteArchivedUser);
 router.get("/:id",getUserById)
+router.purge("/:id",)
 export default router;

@@ -6,7 +6,6 @@ import { checkTokenValid, saveUserId } from "../../TypeScript/Auth/Auth"
 export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
     let search = localStorage.getItem("search")
     let [bool, setBool] = useState(false)
-    let [userID, setUserID] = useState(Number)
     let [tokenValid, setTokenValid] = useState(false)
     const token = localStorage.getItem("id")
     useEffect(() => {
