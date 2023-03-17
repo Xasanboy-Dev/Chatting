@@ -95,6 +95,6 @@ export async function removeUserFromArchieve(
   });
 }
 
-export async function updateUser(userID: number, name: string, surname: string, email: string, password: string) {
+export async function editUser(userID: number, name: string, surname: string, email: string, password: string) {
   return await prisma.user.update({ where: { id: userID }, data: { name, surname, email, password } })
 }

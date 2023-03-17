@@ -1,5 +1,4 @@
 import axios from "axios";
-import { user } from "../modules/user";
 export async function LoginFile(password: string, email: string) {
   try {
     const result = await axios.post(`http://localhost:8080/user/login`, {
@@ -7,6 +6,7 @@ export async function LoginFile(password: string, email: string) {
       password,
     });
     localStorage.setItem("id", result.data.token);
+    localStorage.setItem("userID", result.data.userID);
     return true;
   } catch (error: any) {
     alert(`You have some problems!.\n Please try again later`);
@@ -54,5 +54,5 @@ export async function saveUserId(token: string) {
   const result = await axios.post(`http:///localhost:8080/user/token`, {
     token,
   });
-  return result.data.user.id
+  return result.data.user.id;
 }

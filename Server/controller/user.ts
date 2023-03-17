@@ -4,6 +4,7 @@ import { Sign } from "../database/token";
 import {
   checkUserExistByEmail,
   checkUserExistByID,
+  editUser,
   findUsers,
   Register,
   removeUserById,
@@ -31,7 +32,7 @@ export async function postLogin(req: Request, res: Response) {
           userExist.email,
           userExist.id
         );
-        res.status(200).json({ message: "Bear", token });
+        res.status(200).json({ message: "Bear", token, userID: userExist.id });
       }
     }
   } catch (error: any) {
@@ -129,8 +130,8 @@ export async function checkTokenValid(req: Request, res: Response) {
       return res.status(401).json({ message: "User not authorized!" });
     } else {
       try {
-        const result = await Verify(token);
-        res.status(200).json({ message: "Successfully!", user: result });
+        const result = Verify(token);
+        return res.status(200).json({ message: "Successfully!", user: result });
       } catch (error: any) {
         console.log(error.message);
         return res.status(401).json({ message: "User not authorized!" });
@@ -177,14 +178,12 @@ export async function findArchievedUsers(req: Request, res: Response) {
       if (ValidToken) {
         const user = await checkUserExistByID(ValidToken.id);
         if (user) {
-          let archived = user.archieve
-          let users: user[] = []
+          let archived = user.archieve;
+          let users: user[] = [];
           archived.map(async (userId: number) => {
-            users.push((await checkUserExistByID(userId))!)
-          })
-          return res
-            .status(200)
-            .json({ message: "Archieved users", users });
+            users.push((await checkUserExistByID(userId))!);
+          });
+          return res.status(200).json({ message: "Archieved users", users });
         } else {
           return res.status(404).json({ message: "User not found!" });
         }
@@ -263,27 +262,39 @@ export async function getUserById(req: Request, res: Response) {
 
 export async function editUserById(req: Request, res: Response) {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     if (id) {
-      const { name, lastname, email, password } = req.body
-      const user = await checkUserExistByID(+id)
+      const { name, lastname, email, password } = req.body;
+      const user = await checkUserExistByID(+id);
       if (user) {
         if (email) {
-          const checkUserByEmail = await checkUserExistByEmail(email)
-          if(checkUserByEmail!){
-
-          }else{
-            return res.status(409).json({message:"Your email is already exisrt!"})
+          const checkUserByEmail = await checkUserExistByEmail(email);
+          if (checkUserByEmail?.id !== user.id) {
+            return res
+              .status(409)
+              .json({ message: `Your email is already exist!` });
+          } else {
+            await editUser(user.id, name, lastname, email, password);
+            return res.status(200).json({
+              message: "Edited succesfully!",
+              user: { name, lastname, email, id },
+            });
           }
+        } else {
+          await editUser(user.id, name, lastname, email, password);
+          return res.status(200).json({
+            message: "Edited succesfully!",
+            user: { name, lastname, email, id },
+          });
         }
       } else {
-        return res.status(404).json({ message: "User not found!" })
+        return res.status(404).json({ message: "User not found!" });
       }
     } else {
-      return res.status(401).json({ message: "You must to login!" })
+      return res.status(401).json({ message: "You must to login!" });
     }
   } catch (error: any) {
-    console.log(error.message)
-    res.status(500).json({ message: "Internal error" })
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
   }
 }

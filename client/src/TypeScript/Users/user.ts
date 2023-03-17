@@ -47,8 +47,42 @@ export async function getUserById(id: number, token: string) {
   });
 }
 
-export async function editUser(userID: number, name: string, lastname: string, email: string, password: string) {
-  if (userID && name && lastname && email && password) {
-    axios.put(`http://localhost:8080/user`)
+export async function editUser(
+  userID: number,
+  name: string,
+  lastname: string,
+  email: string,
+  password: string,
+  bool: Boolean,
+  image: any
+) {
+  if (userID && name && lastname && email && password && bool && image) {
+    console.log(image);
+    try {
+      const result = await axios.put(`http://localhost:8080/user/${userID}`, {
+        name,
+        lastname,
+        email,
+        password,
+      });
+      console.log(result.data);
+      alert(result.data.message);
+      return (window.location.href = "/profile");
+    } catch (error: any) {
+      alert(error.response.data.message);
+    }
   }
+}
+
+export async function getUsetByToken(token: string) {
+  const result = await axios.post(`http://localhost:8080/user/token`, token);
+  console.log(result.data);
+}
+
+export async function editImageProfile(e: any) {
+  let blob = new Blob([e]);
+  return URL.createObjectURL(blob);
+}
+export async function newFormData(e:any){
+  let form = new FormData()
 }

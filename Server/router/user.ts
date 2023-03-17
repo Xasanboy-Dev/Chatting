@@ -3,6 +3,7 @@ import {
   checkTokenValid,
   deleteArchivedUser,
   deleteUserById,
+  editUserById,
   findArchievedUsers,
   getAllUsers,
   getUserById,
@@ -23,6 +24,6 @@ router.post("/token", checkTokenValid);
 router.post("/saveArchieve/", postForArchieve);
 router.get("/archivedUsers", findArchievedUsers);
 router.delete("/archieve", deleteArchivedUser);
-router.get("/:id",getUserById)
-router.purge("/:id",)
+router.get("/:id", getUserById);
+router.put("/:id", editUserById);
 export default router;
