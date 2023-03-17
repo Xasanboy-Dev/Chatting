@@ -1,5 +1,7 @@
 import EmojiPicker from 'emoji-picker-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { user } from '../../TypeScript/modules/user'
+import { getUserById } from '../../TypeScript/Users/user'
 export default function Chatting({
     darkMode,
     currentUserID,
@@ -9,56 +11,84 @@ export default function Chatting({
     currentUserID: number
     chattingUserID: number
 }) {
-    let [bool, setBool] = useState(false)
-    let [text, setText] = useState('')
-    return (
-        <div
-            style={{ height: innerHeight - 100 }}
-            className={` text-${darkMode ? 'light' : 'purple-700'} bg-${
-                darkMode ? 'dark' : 'light'
-            }`}
-        >
-            <div
-                onClick={() => {
-                    setBool(false)
-                }}
-                style={{ height: innerHeight - 170 }}
-                className={``}
-            ></div>
-            <div
-                className={`flex text-center items-center h-[7%] p-2 border border-light`}
-            >
-                <h1 onClick={() => setBool(true)}>
+    const token = localStorage.getItem("id")
+    if (token) {
+        let [user, setUser] = useState<user>()
+        useEffect(() => {
+            const resut = getUserById(chattingUserID, token)
+            resut.then(res => {
+                setUser(res.data.user)
+                console.log(res)
+            })
+        }, [])
+        let [bool, setBool] = useState(false)
+        let [text, setText] = useState('')
+        if (user) {
+            return (
+                <div
+                    style={{ height: innerHeight - 100 }}
+                    className={` text-${darkMode ? 'light' : 'purple-700'} bg-${darkMode ? 'dark' : 'light'
+                        }`}
+                >
                     <div
-                        className='border mb-[125%]'
-                        style={{ display: bool ? 'flex' : 'none' }}
+                        onClick={() => {
+                            setBool(false)
+                        }}
+                        style={{ height: innerHeight - 170 }}
                     >
-                        <EmojiPicker
-                            onEmojiClick={(e) => setText(text + e.emoji)}
-                        />
+                        <div className={`border border-${darkMode ? "light" : "dark"} h-[10%]`}>
+                            <ul>
+                                <li>
+                                    <img
+                                        className={`w-[10%]`}
+                                        src={`${user.imageURL}`} />
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <i
-                        style={{ display: bool ? 'none' : 'flex' }}
-                        className='mx-3  text-3xl bi bi-emoji-smile-fill'
-                    ></i>
-                </h1>
-                <input
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    className={`text-dark border border-${
-                        darkMode ? 'light' : 'dark'
-                    } text-2xl p-2 w-[85%] h-full`}
-                    type={'text'}
-                    placeholder={`Start typing....`}
-                />
-                <button
-                    className={`
+                    <div
+                        className={`flex text-center items-center h-[7%] p-2 border border-light`}
+                    >
+                        <h1 onClick={() => setBool(true)}>
+                            <div
+                                className='border mb-[125%]'
+                                style={{ display: bool ? 'flex' : 'none' }}
+                            >
+                                <EmojiPicker
+                                    onEmojiClick={(e) => setText(text + e.emoji)}
+                                />
+                            </div>
+                            <i
+                                style={{ display: bool ? 'none' : 'flex' }}
+                                className='mx-3  text-3xl bi bi-emoji-smile-fill'
+                            ></i>
+                        </h1>
+                        <input
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            className={`text-dark border border-${darkMode ? 'light' : 'dark'
+                                } text-2xl p-2 w-[85%] h-full`}
+                            type={'text'}
+                            placeholder={`Start typing....`}
+                        />
+                        <button
+                            className={`
                         border border-${darkMode ? 'light' : 'dark'}
                     `}
-                >
-                    Send
-                </button>
-            </div>
-        </div>
-    )
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div className={`flex justify-content-center text-2xl `}>You must to Login!</div>
+            )
+        }
+    } else {
+        return (
+            <div className={`flex justify-content-center text-2xl `}>You must to Login!</div>
+        )
+    }
 }

@@ -23,11 +23,9 @@ export default function IndexChat({ darkMode }: { darkMode: Boolean }) {
         return (
             <div
                 style={{ height: innerHeight }}
-                className={`bg-${
-                    darkMode ? 'dark' : 'light'
-                } flex justify-content-center text-2xl text-${
-                    darkMode ? 'light' : 'purple-700'
-                } 
+                className={`bg-${darkMode ? 'dark' : 'light'
+                    } flex justify-content-center text-2xl text-${darkMode ? 'light' : 'purple-700'
+                    } 
              `}
             >
                 Please login!
