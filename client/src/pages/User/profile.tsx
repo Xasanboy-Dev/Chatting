@@ -55,7 +55,7 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
         >
           <ul className={`items-center flex`}>
             <div className="mx-5">
-              <div className={`py-5 ml-[15%] flex gap-5`}>
+              <div className={`py-5 ml-[15%] flex`}>
                 <li>
                   <label
                     className={`
@@ -182,7 +182,7 @@ export default function Profile({ darkMode }: { darkMode: Boolean }) {
                   style={{ display: "none" }}
                 />
                 <img
-                  className={` ml-[55%] w-[520px] h-[350px] mt-[10%] shadow`}
+                  style={{ height: innerHeight-500 }} className={`rounded ml-[2%] w-[75%] mt-[10%] shadow`}
                   src={`${image ? image : aboutUser.imageURL}`}
                 />
               </label>
