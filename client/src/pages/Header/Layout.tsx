@@ -6,7 +6,7 @@ export default function Layot({ darkMode, setDarkMode }: { darkMode: Boolean, se
     return (
         <div>
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            <IndexPage darkMode={darkMode} />
+            {/* <IndexPage darkMode={darkMode} /> */}
             <Outlet />
         </div>
     )

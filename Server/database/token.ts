@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export async function Verify(token: string) {
+export  function Verify(token: string) {
   const SECRET = process.env.SECRET_ACCES_KEY;
   return jwt.verify(token, SECRET!);
 }

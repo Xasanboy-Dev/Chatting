@@ -40,4 +40,57 @@ export async function getUserSearch(
   surname: string,
   email: string,
   location: string
-) {}
+) {
+  if (name && surname && email && location) {
+    return await prisma.user.findMany({
+      where: { name, surname, email, location },
+    });
+  } else if (name && surname && email && !location) {
+    return await prisma.user.findMany({
+      where: { name, surname, email },
+    });
+  } else if (name && surname && !email && location) {
+    return await prisma.user.findMany({
+      where: { name, surname, location },
+    });
+  } else if (name && !surname && email && location) {
+    return await prisma.user.findMany({
+      where: { name, email, location },
+    });
+  } else {
+    return await prisma.user.findMany({
+      where: {
+        name: name ? name : "",
+        surname: surname ? surname : "",
+        email: email ? email : "",
+        location: location ? location : "",
+      },
+    });
+  }
+}
+
+export async function SaveToArchieve(userId: number, chattingUserID: number) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  let arr = user?.archieve;
+  if (!arr?.includes(chattingUserID)) {
+    arr?.push(chattingUserID);
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { archieve: arr },
+    });
+  } else {
+    return await prisma.user.findUnique({ where: { id: userId } });
+  }
+}
+export async function removeUserFromArchieve(
+  currentUserID: number,
+  deletetingUserId: number
+) {
+  let user = await prisma.user.findUnique({ where: { id: currentUserID } });
+  let arr = user?.archieve;
+  arr = arr?.filter((userId) => userId !== deletetingUserId);
+  return await prisma.user.update({
+    where: { id: currentUserID },
+    data: { archieve: arr },
+  });
+}

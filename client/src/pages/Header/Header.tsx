@@ -22,7 +22,7 @@ export default function Header({ darkMode, setDarkMode }: { darkMode: Boolean, s
         <div>
             <ul className={`flex bg-${darkMode ? "dark" : "light"}  justify-content-between items-center`}>
                 <li className={`flex text-${darkMode ? "light" : "purple-700"} justify-content-start mx-[5%] my-[1%] text-[25px] items-center`}>
-                    <a href='/' className={`cursor-pointer gap-1 border py-1 flex items-center border-${darkMode ? "light" : 'dark'} px-3 shadow shadow-2xl rounded`}>
+                    <a href='/index' className={`cursor-pointer gap-1 border py-1 flex items-center border-${darkMode ? "light" : 'dark'} px-3 shadow shadow-2xl rounded`}>
                         Chatting <i className="bi bi-telegram"></i>
                     </a>
                 </li>
@@ -89,13 +89,13 @@ export default function Header({ darkMode, setDarkMode }: { darkMode: Boolean, s
                     </form>
                 </li>
                 <li className={`flex gap-5 mx-[5%] text-${darkMode ? "light" : "dark"} `}>
-                    <h1
+                    <a href="/archieve"
                         className={`shadow shadow-2xl border border-
                     ${darkMode ? "light" : "dark"}
                      rounded p-2 cursor-pointer`
                         }
                         style={{ display: bool ? "block" : "none" }}
-                    >Archive<i className="bi bi-file-earmark-zip"></i></h1>
+                    >Archive<i className="bi bi-file-earmark-zip"></i></a>
                     <h1
                         className={`shadow shadow-2xl border border-
                     ${darkMode ? "light" : "dark"}

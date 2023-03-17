@@ -7,7 +7,10 @@ import {
   findUsers,
   Register,
   removeUserById,
+  removeUserFromArchieve,
+  SaveToArchieve,
 } from "../database/user";
+import { user } from "@prisma/client";
 
 export async function postLogin(req: Request, res: Response) {
   try {
@@ -136,5 +139,121 @@ export async function checkTokenValid(req: Request, res: Response) {
   } catch (error: any) {
     console.log(error.message);
     return res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function postForArchieve(req: Request, res: Response) {
+  try {
+    const token = req.headers.authorization;
+    const { ID, chattingUser } = req.body;
+    if (token && ID && chattingUser) {
+      const ValidToken = Verify(token);
+      if (ValidToken) {
+        const user = await checkUserExistByID(+ID);
+        const chatting = await checkUserExistByID(+chattingUser);
+        if (user && chatting) {
+          const Archieve = await SaveToArchieve(user.id, chatting.id);
+          return res.status(201).json({ message: "Added succefully!" });
+        } else {
+          return res.status(404).json({ message: "User is not exist!" });
+        }
+      } else {
+        return res.status(401).json({ message: "You must to login!" });
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" });
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function findArchievedUsers(req: Request, res: Response) {
+  try {
+    const token = req.headers.authorization;
+    if (token) {
+      const ValidToken: any = Verify(token);
+      if (ValidToken) {
+        const user = await checkUserExistByID(ValidToken.id);
+        let users: any = [];
+        if (user) {
+          let arr = user.archieve;
+          return res
+            .status(200)
+            .json({ message: "Archieved users", users: arr });
+        } else {
+          return res.status(404).json({ message: "User not found!" });
+        }
+      } else {
+        return res.status(401).json({ message: "You must to login!" });
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" });
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export async function deleteArchivedUser(req: Request, res: Response) {
+  try {
+    const token = req.headers.authorization;
+    const deletingUserID = req.headers.accept;
+    if (token && deletingUserID) {
+      const ValidToken: any = Verify(token);
+      if (ValidToken) {
+        const userID = ValidToken.id;
+        const user = await checkUserExistByID(userID);
+        if (user) {
+          const deleteExist = await checkUserExistByID(+deletingUserID);
+          if (deleteExist) {
+            const deletedArchieve = await removeUserFromArchieve(
+              userID,
+              +deletingUserID
+            );
+            return res
+              .status(200)
+              .json({ message: "Deleted succesfully!", user: deletedArchieve });
+          } else {
+            return res.status(404).json({ message: "User not found!" });
+          }
+        } else {
+          return res.status(404).json({ message: "User not found!" });
+        }
+      } else {
+        return res.status(401).json({ message: "You must to login!" });
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" });
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+export async function getUserById(req: Request, res: Response) {
+  try {
+    const token = req.headers.authorization;
+    const { id } = req.params;
+    if (token && id) {
+      const ValidateToken = Verify(token);
+      if (ValidateToken) {
+        const user = await checkUserExistByID(+id);
+        if (user) {
+          return res.status(200).json({ message: "User", user });
+        } else {
+          return res.status(404).json({ message: "User not found!" });
+        }
+      } else {
+        return res.status(401).json({ message: "You must to login!" });
+      }
+    } else {
+      return res.status(401).json({ message: "You must to login!" });
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal error" });
   }
 }

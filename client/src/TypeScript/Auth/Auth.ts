@@ -1,4 +1,5 @@
 import axios from "axios";
+import { user } from "../modules/user";
 export async function LoginFile(password: string, email: string) {
   try {
     const result = await axios.post(`http://localhost:8080/user/login`, {
@@ -47,4 +48,11 @@ export async function checkTokenValid(token: string) {
   } else {
     return true;
   }
+}
+
+export async function saveUserId(token: string) {
+  const result = await axios.post(`http:///localhost:8080/user/token`, {
+    token,
+  });
+  return result.data.user.id
 }

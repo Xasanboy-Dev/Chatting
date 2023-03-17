@@ -1,10 +1,29 @@
 import { useEffect, useReducer, useState } from "react"
-import { getUsers } from "../../TypeScript/Users/user"
+import { getUsers, SaveToArchieve } from "../../TypeScript/Users/user"
 import { user } from "./../../TypeScript/modules/user"
 import { CopyToClipboard } from "react-copy-to-clipboard"
+import { checkTokenValid, saveUserId } from "../../TypeScript/Auth/Auth"
 export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
     let search = localStorage.getItem("search")
-    let [copy, setCopy] = useState(false)
+    let [bool, setBool] = useState(false)
+    let [userID, setUserID] = useState(Number)
+    let [tokenValid, setTokenValid] = useState(false)
+    const token = localStorage.getItem("id")
+    useEffect(() => {
+        if (token) {
+            const result = checkTokenValid(token)
+            result.then(res => {
+                setBool(res)
+                setTokenValid(res)
+            })
+            if (tokenValid) {
+                const result = saveUserId(token)
+                result.then(res => {
+                    localStorage.setItem('userID', res)
+                })
+            }
+        }
+    }, [])
     let [users, setUsers] = useState<user[]>([])
     let [searching, setSeaching] = useState("")
     if (search) {
@@ -12,6 +31,7 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
         localStorage.removeItem("search")
     }
     if (searching) {
+
     } else {
         useEffect(() => {
             getUsers().then((user: user[]) => {
@@ -23,13 +43,14 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
         <div className={`bg-${darkMode ? "dark" : "light"}`} style={{ height: innerHeight }}>
             <ul className="py-5">
                 {users.map(user => (
-                    <li className={`items-center my-5 flex border border-${darkMode ? "light" : "dark"} border-2xl w-[80%] mx-auto rounded-2xl  shadow shadow-2xl`}>
+                    <li className={`items-center my-5 flex border border-${darkMode ? "light" : "dark"} 
+                    border-2xl w-[80%] mx-auto rounded-2xl  shadow shadow-2xl`}>
                         <div>
                             <img className={`h-[75px] p-2 rounded-full`} src={`${user.imageURL}`} />
                         </div>
                         <div className="mx-2">
                             <CopyToClipboard text={`${user.email}`}>
-                                <button className={` items-center flex`}>
+                                <button onClick={() => alert("Copied succesfully!")} className={` items-center flex`}>
                                     <h1 className={`border border-${darkMode ? "light" : "dark"} text-${darkMode ? "light" : "dark"} rounded p-2`}>
                                         {user.email}
                                     </h1>
@@ -41,14 +62,31 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
                                 </button>
                             </CopyToClipboard>
                         </div>
-                        <div className={`mx-[5%] flex gap-5 justify-content-between`}>
-                            <button>Save</button>
-                            <button>Archieve</button>
-                            <button>Send a message</button>
+                        <div style={{ display: bool ? "flex" : "none" }} className={`mx-auto flex gap-3`}>
+                            <button
+                                onClick={() => {
+                                    if (tokenValid) {
+                                        SaveToArchieve(token!, +localStorage.getItem("userID")!, user.id)
+                                    } else {
+                                        return alert("You can't archieve!")
+                                    }
+                                }}
+                                className={`
+                            text-light text-xl 
+                             py-1 px-3 border-${darkMode ? "light" : "dark"} border
+                             rounded bg-red-700 
+                             `} >Archieve</button>
+                            <button
+                                className={`
+                            text-light
+                             py-1 px-3 border-${darkMode ? "light" : "dark"} border
+                             rounded bg-green-700 
+                             `} >Send a message</button>
                         </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
+                    </li >
+                ))
+                }
+            </ul >
+        </div >
     )
 } 

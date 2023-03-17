@@ -5,6 +5,7 @@ import Profile from "./pages/User/profile"
 import Header from "./pages/Header/Header"
 import Layot from "./pages/Header/Layout"
 import Index from "./pages/Auth/IndexPage"
+import Archieve from "./pages/Header/Archieve"
 import { useState } from "react"
 function App() {
   let [darkMode, setDarkMode] = useState(Boolean)
@@ -14,9 +15,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path='/' element={<Layot darkMode={darkMode} setDarkMode={setDarkMode} />}>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/sadmclskmcdlskm" element={<Header darkMode={darkMode} setDarkMode={setDarkMode} />} />
+          <Route path="/profile" element={<Profile darkMode={darkMode}  />} />
+          <Route path="/axasxasxasxsax" element={<Header darkMode={darkMode} setDarkMode={setDarkMode} />} />
           <Route path="/index" element={<Index darkMode={darkMode} />} />
+          <Route path="/Archieve" element={<Archieve darkMode={darkMode} />} />
         </Route>
       </Routes>
     </div>
