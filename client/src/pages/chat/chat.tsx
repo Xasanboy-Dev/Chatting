@@ -1,7 +1,7 @@
 import EmojiPicker from 'emoji-picker-react'
 import { useEffect, useState } from 'react'
 import { user } from '../../TypeScript/modules/user'
-import { getUserById } from '../../TypeScript/Users/user'
+import { getChattingUserById } from '../../TypeScript/Users/user'
 export default function Chatting({
     darkMode,
     currentUserID,
@@ -13,16 +13,17 @@ export default function Chatting({
 }) {
     const token = localStorage.getItem("id")
     if (token) {
-        let [user, setUser] = useState<user>()
-        useEffect(() => {
-            const resut = getUserById(chattingUserID, token)
-            resut.then(res => {
-                setUser(res.data.user)
-                console.log(res)
-            })
-        }, [])
         let [bool, setBool] = useState(false)
         let [text, setText] = useState('')
+        let [user, setUser] = useState<user>()
+        useEffect(() => {
+            if (chattingUserID) {
+                const resut = getChattingUserById(currentUserID, chattingUserID)
+                resut.then(res => {
+                    setUser(res.data.user)
+                })
+            }
+        })
         if (user) {
             return (
                 <div
@@ -37,11 +38,21 @@ export default function Chatting({
                         style={{ height: innerHeight - 170 }}
                     >
                         <div className={`border border-${darkMode ? "light" : "dark"} h-[10%]`}>
-                            <ul>
-                                <li>
+                            <ul className='flex items-center '>
+                                <li className=''>
                                     <img
-                                        className={`w-[10%]`}
+                                        className={`rounded-full my-1 w-[25%] ml-5`}
                                         src={`${user.imageURL}`} />
+                                </li>
+                                <li className=''>
+                                    <div className='text-2xl bold gap-5 flex '>
+                                        <h1 className=''>{user.name}</h1>
+                                        <h1>{user.surname}</h1>
+                                    </div>
+                                    <div className='flex items-center '>
+                                        <h1 className={`text-${darkMode ? "light" : "green-700"}  text-2xl`}><i className="bi bi-dot"></i></h1>
+                                        <h1>Online</h1>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
