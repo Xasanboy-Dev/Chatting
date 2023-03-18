@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { LoginFile } from "../../TypeScript/Auth/Auth";
 import { app } from "../../TypeScript/Auth/firebase";
@@ -43,7 +43,7 @@ export default function Login() {
                             Email
                         </label>
                         <input value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => useEffect(() => { setEmail(e.target.value) }, [])}
                             type="email"
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                         />
@@ -57,7 +57,7 @@ export default function Login() {
                         </label>
                         <input
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => useEffect(() => { setPassword(e.target.value) }, [])}
                             type="password"
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                         />
@@ -79,7 +79,7 @@ export default function Login() {
                 </div>
                 <div className="flex mt-4 gap-x-2">
                     <button
-                        onClick={() => signInWithGoogle()}
+                        onClick={() => useEffect(() => { signInWithGoogle() }, [])}
                         type="button"
                         className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-offset-1 focus:ring-violet-600"
                     >

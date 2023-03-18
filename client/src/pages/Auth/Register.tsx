@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postDataUser } from "../../TypeScript/Auth/Auth";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../TypeScript/Auth/firebase";
@@ -14,7 +14,13 @@ export default function Register() {
             alert("Your data is must not be shorter than 6. Please fill at to end!")
             return
         } else {
-            const result = await postDataUser(name, surname, email, password)
+            let [result, setResult] = useState<any>()
+            useEffect(() => {
+                let result = postDataUser(name, surname, email, password)
+                result.then(res => {
+                    setResult(res)
+                })
+            }, [])
             if (result) {
                 return window.location.href = '/login'
             }

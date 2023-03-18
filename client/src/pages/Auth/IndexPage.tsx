@@ -12,7 +12,10 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
     let [bool, setBool] = useState(false)
     let [user, setUser] = useState<user>()
     let [archiveUserId, setArchieve] = useState<number[]>([])
-    let [tokenValid, setTokenValid] = useState(false)
+    let [tokenValid, setTokenValid] = useState(false)    
+    let [users, setUsers] = useState<user[]>([])
+    let [searching, setSeaching] = useState('')
+    
     const token = localStorage.getItem('id')
     useEffect(() => {
         if (token) {
@@ -33,20 +36,21 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
             })
         }
     }, [])
-    let [users, setUsers] = useState<user[]>([])
-    let [searching, setSeaching] = useState('')
-    if (search) {
-        setSeaching(search!)
-        localStorage.removeItem('search')
-    }
-    if (searching) {
-    } else {
-        useEffect(() => {
-            getUsers().then((user: user[]) => {
-                setUsers(user)
-            })
+
+    
+    useEffect(() => {
+        if (search) {
+            setSeaching(search)
+            localStorage.removeItem('search')
+        }
+    }, [search])
+
+    useEffect(() => {
+        getUsers().then((user: user[]) => {
+            setUsers(user)
         })
-    }
+    }, [searching])
+
     return (
         <div
             className={`bg-${darkMode ? 'dark' : 'light'}`}
@@ -55,9 +59,8 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
             <ul className='py-5'>
                 {users.map((user: user) => (
                     <li
-                        className={`items-center my-5 flex border border-${
-                            darkMode ? 'light' : 'dark'
-                        } 
+                        className={`items-center my-5 flex border border-${darkMode ? 'light' : 'dark'
+                            } 
                     border-2xl w-[80%] mx-auto rounded-2xl  shadow shadow-2xl`}
                     >
                         <div>
@@ -73,18 +76,15 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
                                     className={` items-center flex`}
                                 >
                                     <h1
-                                        className={`border border-${
-                                            darkMode ? 'light' : 'dark'
-                                        } text-${
-                                            darkMode ? 'light' : 'dark'
-                                        } rounded p-2`}
+                                        className={`border border-${darkMode ? 'light' : 'dark'
+                                            } text-${darkMode ? 'light' : 'dark'
+                                            } rounded p-2`}
                                     >
                                         {user.email}
                                     </h1>
                                     <h2
-                                        className={`text-${
-                                            darkMode ? 'light' : 'dark'
-                                        }`}
+                                        className={`text-${darkMode ? 'light' : 'dark'
+                                            }`}
                                     >
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
@@ -111,20 +111,21 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
                             <button
                                 onClick={() => {
                                     if (tokenValid) {
-                                        SaveToArchieve(
-                                            token!,
-                                            +localStorage.getItem('userID')!,
-                                            user.id
-                                        )
+                                        useEffect(() => {
+                                            SaveToArchieve(
+                                                token!,
+                                                +localStorage.getItem('userID')!,
+                                                user.id
+                                            )
+                                        }, [])
                                     } else {
                                         return alert("You can't archieve!")
                                     }
                                 }}
                                 className={`
                             text-light text-xl 
-                             py-1 px-3 border-${
-                                 darkMode ? 'light' : 'dark'
-                             } border
+                             py-1 px-3 border-${darkMode ? 'light' : 'dark'
+                                    } border
                              rounded bg-red-700 
                              `}
                             >
@@ -133,9 +134,8 @@ export default function IndexPage({ darkMode }: { darkMode: Boolean }) {
                             <button
                                 className={`
                             text-light
-                             py-1 px-3 border-${
-                                 darkMode ? 'light' : 'dark'
-                             } border
+                             py-1 px-3 border-${darkMode ? 'light' : 'dark'
+                                    } border
                              rounded bg-green-700 
                              `}
                             >

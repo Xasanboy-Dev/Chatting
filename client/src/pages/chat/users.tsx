@@ -14,7 +14,7 @@ export default function users({
         getUsers().then((user: user[]) => {
             setUsers(user)
         })
-    })
+    }, [])
     return (
         <div
             style={{ height: innerHeight - 100 }}
@@ -23,11 +23,9 @@ export default function users({
             `}
         >
             <div
-                className={`flex h-[7%] gap-2 mt-2 mx-2  rounded cursor-pointer items-center text-${
-                    darkMode ? 'light' : 'purple-700'
-                } justify-content-center text-2xl border border-${
-                    darkMode ? 'light' : 'dark'
-                }`}
+                className={`flex h-[7%] gap-2 mt-2 mx-2  rounded cursor-pointer items-center text-${darkMode ? 'light' : 'purple-700'
+                    } justify-content-center text-2xl border border-${darkMode ? 'light' : 'dark'
+                    }`}
             >
                 <i className='bi text-3xl bi-cloud-arrow-up'></i>{' '}
                 <h1>Archived Chats</h1>
@@ -36,11 +34,9 @@ export default function users({
                 {users.map((user) => (
                     <li
                         onClick={() => setOnClick(user.id)}
-                        className={`text-${
-                            darkMode ? 'light' : 'purple-700'
-                        } flex gap-5 my-3 mx-4 cursor-pointer overflow-x-auto rounded items-center  border border-${
-                            darkMode ? 'light' : 'dark'
-                        }`}
+                        className={`text-${darkMode ? 'light' : 'purple-700'
+                            } flex gap-5 my-3 mx-4 cursor-pointer overflow-x-auto rounded items-center  border border-${darkMode ? 'light' : 'dark'
+                            }`}
                     >
                         <img
                             src={`${user.imageURL}`}
